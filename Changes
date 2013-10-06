@@ -1,5 +1,11 @@
 Revision history for SHARYANTO-Roles
 
+0.63    2013-10-06 (SHARYANTO)
+
+        - Replace color_theme_class_prefix from using 'has' to using classic sub
+          because it needs to be called as static method too sometimes.
+
+
 0.62    2013-10-04 (SHARYANTO)
 
         - First release. Split from SHARYANTO-Utils so deps are lighter.
