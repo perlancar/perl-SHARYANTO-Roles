@@ -1,5 +1,11 @@
 Revision history for SHARYANTO-Roles
 
+0.65    2013-10-10 (SHARYANTO)
+
+        - TermAttrs: Tweak default use_color setting (obey COLOR, or only when
+          interactive and color_depth > 0).
+
+
 0.64    2013-10-10 (SHARYANTO)
 
         - No functional changes. Avoid perl undef warning.
