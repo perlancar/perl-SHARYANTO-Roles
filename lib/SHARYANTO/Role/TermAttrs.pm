@@ -46,7 +46,7 @@ has use_color => (
     default => sub {
         my $self = shift;
         $ENV{COLOR} // $ENV{INTERACTIVE} //
-            $self->detect_terminal->{color_depth} > 0;
+            $self->color_depth > 0;
     },
 );
 
