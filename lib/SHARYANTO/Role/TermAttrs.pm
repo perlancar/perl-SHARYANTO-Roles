@@ -45,8 +45,8 @@ has use_color => (
     is      => 'rw',
     default => sub {
         my $self = shift;
-        $ENV{COLOR} // $ENV{INTERACTIVE} //
-            $self->color_depth > 0;
+        return $ENV{COLOR} if defined $ENV{COLOR};
+        $self->interactive && $self->color_depth > 0;
     },
 );
 
