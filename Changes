@@ -1,5 +1,11 @@
 Revision history for SHARYANTO-Roles
 
+0.66    2013-11-12 (SHARYANTO)
+
+        - No functional changes. Rebuild to fix t/00-compile.t produced by older
+          version of DZP::Test::Compile (< 2.033).
+
+
 0.65    2013-10-10 (SHARYANTO)
 
         - TermAttrs: Tweak default use_color setting (obey COLOR, or only when
