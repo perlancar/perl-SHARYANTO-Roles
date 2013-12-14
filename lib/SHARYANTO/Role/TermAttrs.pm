@@ -90,15 +90,15 @@ has use_box_chars => (
     default => sub {
         my $self = shift;
         if (defined $ENV{BOX_CHARS}) {
-            $self->{_term_attrs_debug_info}{color_depth_from} =
+            $self->{_term_attrs_debug_info}{use_box_chars_from} =
                 'BOX_CHARS env';
             return $ENV{BOX_CHARS};
         } elsif (defined(my $bc = $self->detect_terminal->{box_chars})) {
-            $self->{_term_attrs_debug_info}{color_depth_from} =
+            $self->{_term_attrs_debug_info}{use_box_chars_from} =
                 'detect_terminal';
             return $bc;
         } else {
-            $self->{_term_attrs_debug_info}{color_depth_from} =
+            $self->{_term_attrs_debug_info}{use_box_chars_from} =
                 'hardcoded default';
             return 0;
         }
@@ -110,16 +110,16 @@ has use_utf8 => (
     default => sub {
         my $self = shift;
         if (defined $ENV{UTF8}) {
-            $self->{_term_attrs_debug_info}{color_depth_from} =
+            $self->{_term_attrs_debug_info}{use_utf8_from} =
                 'UTF8 env';
             return $ENV{UTF8};
         } elsif (defined(my $termuni = $self->detect_terminal->{unicode})) {
-            $self->{_term_attrs_debug_info}{color_depth_from} =
+            $self->{_term_attrs_debug_info}{use_utf8_from} =
                 'detect_terminal + LANG/LANGUAGE env must include "utf8"';
             return $termuni &&
                 (($ENV{LANG} || $ENV{LANGUAGE} || "") =~ /utf-?8/i ? 1:0);
         } else {
-            $self->{_term_attrs_debug_info}{color_depth_from} =
+            $self->{_term_attrs_debug_info}{use_utf8_from} =
                 'hardcoded default';
             return 0;
         }
