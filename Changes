@@ -1,5 +1,17 @@
 Revision history for SHARYANTO-Roles
 
+0.67    2013-12-14 (SHARYANTO)
+
+        - TermAttrs: Add debugging info (in _term_attrs_debug_info) to let user
+          know how the attribute values are determined.
+
+        [REMOVED FEATURES]
+
+        - Remove roles I18N, I18NMany, I18NRinci. They are convenient for when
+          using Locale::Maketext but I switched all my distributions to using
+          Locale::TextDomain this week, so these roles are no longer needed.
+
+
 0.66    2013-11-12 (SHARYANTO)
 
         - No functional changes. Rebuild to fix t/00-compile.t produced by older

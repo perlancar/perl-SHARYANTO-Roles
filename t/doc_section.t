@@ -9,7 +9,7 @@ use Moo;
 with 'SHARYANTO::Role::Doc::Section';
 
 package main;
-use Test::More 0.96;
+use Test::More 0.98;
 my $doc = MyPkg->new;
 
 $doc->doc_sections([qw/a b c/]);
