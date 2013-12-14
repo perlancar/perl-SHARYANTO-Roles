@@ -1,5 +1,10 @@
 Revision history for SHARYANTO-Roles
 
+0.68    2013-12-14 (SHARYANTO)
+
+        - No functional changes. Fix copy-paste mistake.
+
+
 0.67    2013-12-14 (SHARYANTO)
 
         - TermAttrs: Add debugging info (in _term_attrs_debug_info) to let user
