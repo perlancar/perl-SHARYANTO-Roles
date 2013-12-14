@@ -37,7 +37,15 @@ has interactive => (
     is      => 'rw',
     default => sub {
         my $self = shift;
-        $ENV{INTERACTIVE} // (-t STDOUT);
+        if (defined $ENV{INTERACTIVE}) {
+            $self->{_term_attrs_debug_info}{interactive_from} =
+                'INTERACTIVE env';
+            return $ENV{INTERACTIVE};
+        } else {
+            $self->{_term_attrs_debug_info}{interactive_from} =
+                '-t STDOUT';
+            return (-t STDOUT);
+        }
     },
 );
 
@@ -45,8 +53,15 @@ has use_color => (
     is      => 'rw',
     default => sub {
         my $self = shift;
-        return $ENV{COLOR} if defined $ENV{COLOR};
-        $self->interactive && $self->color_depth > 0;
+        if (defined $ENV{COLOR}) {
+            $self->{_term_attrs_debug_info}{use_color_from} =
+                'COLOR env';
+            return $ENV{COLOR};
+        } else {
+            $self->{_term_attrs_debug_info}{use_color_from} =
+                'interactive + color_deth';
+            return $self->interactive && $self->color_depth > 0;
+        }
     },
 );
 
@@ -54,8 +69,19 @@ has color_depth => (
     is      => 'rw',
     default => sub {
         my $self = shift;
-        return $ENV{COLOR_DEPTH} if defined $ENV{COLOR_DEPTH};
-        return $self->detect_terminal->{color_depth} // 16;
+        if (defined $ENV{COLOR_DEPTH}) {
+            $self->{_term_attrs_debug_info}{color_depth_from} =
+                'COLOR_DEPTH env';
+            return $ENV{COLOR_DEPTH};
+        } elsif (defined(my $cd = $self->detect_terminal->{color_depth})) {
+            $self->{_term_attrs_debug_info}{color_depth_from} =
+                'detect_terminal';
+            return $cd;
+        } else {
+            $self->{_term_attrs_debug_info}{color_depth_from} =
+                'hardcoded default';
+            return 16;
+        }
     },
 );
 
@@ -63,8 +89,19 @@ has use_box_chars => (
     is      => 'rw',
     default => sub {
         my $self = shift;
-        return $ENV{BOX_CHARS} if defined $ENV{BOX_CHARS};
-        return $self->detect_terminal->{box_chars} // 0;
+        if (defined $ENV{BOX_CHARS}) {
+            $self->{_term_attrs_debug_info}{color_depth_from} =
+                'BOX_CHARS env';
+            return $ENV{BOX_CHARS};
+        } elsif (defined(my $bc = $self->detect_terminal->{box_chars})) {
+            $self->{_term_attrs_debug_info}{color_depth_from} =
+                'detect_terminal';
+            return $bc;
+        } else {
+            $self->{_term_attrs_debug_info}{color_depth_from} =
+                'hardcoded default';
+            return 0;
+        }
     },
 );
 
@@ -72,27 +109,41 @@ has use_utf8 => (
     is      => 'rw',
     default => sub {
         my $self = shift;
-        return $ENV{UTF8} if defined $ENV{UTF8};
-        my $termuni = $self->detect_terminal->{unicode};
-        if (defined $termuni) {
+        if (defined $ENV{UTF8}) {
+            $self->{_term_attrs_debug_info}{color_depth_from} =
+                'UTF8 env';
+            return $ENV{UTF8};
+        } elsif (defined(my $termuni = $self->detect_terminal->{unicode})) {
+            $self->{_term_attrs_debug_info}{color_depth_from} =
+                'detect_terminal + LANG/LANGUAGE env must include "utf8"';
             return $termuni &&
                 (($ENV{LANG} || $ENV{LANGUAGE} || "") =~ /utf-?8/i ? 1:0);
+        } else {
+            $self->{_term_attrs_debug_info}{color_depth_from} =
+                'hardcoded default';
+            return 0;
         }
-        0;
     },
 );
+
+has _term_attrs_debug_info => (is => 'rw', default=>sub{ {} });
 
 has term_width => (
     is      => 'rw',
     default => sub {
         my $self = shift;
         if ($ENV{COLUMNS}) {
+            $self->{_term_attrs_debug_info}{term_width_from} = 'COLUMNS env';
             return $ENV{COLUMNS};
         }
         my ($termw, undef) = $self->_term_size;
-        if (!$termw) {
+        if ($termw) {
+            $self->{_term_attrs_debug_info}{term_width_from} = 'term_size';
+        } else {
             # sane default, on windows printing to rightmost column causes
             # cursor to move to the next line.
+            $self->{_term_attrs_debug_info}{term_width_from} =
+                'hardcoded default';
             $termw = $^O =~ /Win/ ? 79 : 80;
         }
         $termw;
@@ -104,10 +155,14 @@ has term_height => (
     default => sub {
         my $self = shift;
         if ($ENV{LINES}) {
+            $self->{_term_attrs_debug_info}{term_height_from} = 'LINES env';
             return $ENV{LINES};
         }
         my (undef, $termh) = $self->_term_size;
-        if (!$termh) {
+        if ($termh) {
+            $self->{_term_attrs_debug_info}{term_height_from} = 'term_size';
+        } else {
+            $self->{_term_attrs_debug_info}{term_height_from} = 'default';
             # sane default
             $termh = 25;
         }
