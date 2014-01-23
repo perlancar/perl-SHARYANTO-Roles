@@ -93,6 +93,12 @@ has use_box_chars => (
             $self->{_term_attrs_debug_info}{use_box_chars_from} =
                 'BOX_CHARS env';
             return $ENV{BOX_CHARS};
+        } elsif (!$self->interactive) {
+            # most pager including 'less -R' does not support interpreting
+            # boxchar escape codes.
+            $self->{_term_attrs_debug_info}{use_box_chars_from} =
+                '(not) interactive';
+            return 0;
         } elsif (defined(my $bc = $self->detect_terminal->{box_chars})) {
             $self->{_term_attrs_debug_info}{use_box_chars_from} =
                 'detect_terminal';
