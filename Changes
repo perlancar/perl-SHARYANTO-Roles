@@ -1,5 +1,11 @@
 Revision history for SHARYANTO-Roles
 
+0.69    2014-01-23 (SHARYANTO)
+
+        - By default turn off use_box_chars when non-interactive, since most
+          pagers includin 'less -R' does not interpret drawing escape codes.
+
+
 0.68    2013-12-14 (SHARYANTO)
 
         - No functional changes. Fix copy-paste mistake.
