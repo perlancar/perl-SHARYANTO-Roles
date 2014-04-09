@@ -2,22 +2,24 @@ Revision history for SHARYANTO-Roles
 
 0.71    2014-04-09 (SHARYANTO)
 
-        - For convenience, use_color and color_depth can set each other. For
-          example, setting $obj->use_color(256) or COLOR=8_bit will now enable
-          color as well as set color_depth to 256. Setting $obj->color_depth(16)
-          will enable use_color, while $obj->color_depth(0) will disable
-          use_color.
+        - TermAttrs: For convenience, use_color and color_depth can set each
+          other. For example, setting $obj->use_color(256) or COLOR=8_bit will
+          now enable color as well as set color_depth to 256. Setting
+          $obj->color_depth(16) will enable use_color, while
+          $obj->color_depth(0) will disable use_color.
 
 
 0.70    2014-04-09 (SHARYANTO)
 
-        - Accept pattern like '8 bit' or '24b' for color_depth, for convenience.
+        - TermAttrs: Accept pattern like '8 bit' or '24b' for color_depth, for
+          convenience.
 
 
 0.69    2014-01-23 (SHARYANTO)
 
-        - By default turn off use_box_chars when non-interactive, since most
-          pagers includin 'less -R' does not interpret drawing escape codes.
+        - TermAttrs: By default turn off use_box_chars when non-interactive,
+          since most pagers includin 'less -R' does not interpret drawing escape
+          codes.
 
 
 0.68    2013-12-14 (SHARYANTO)
@@ -56,8 +58,9 @@ Revision history for SHARYANTO-Roles
 
 0.63    2013-10-06 (SHARYANTO)
 
-        - Replace color_theme_class_prefix from using 'has' to using classic sub
-          because it needs to be called as static method too sometimes.
+        - ColorTheme: Replace color_theme_class_prefix from using 'has' to using
+          classic sub because it needs to be called as static method too
+          sometimes.
 
 
 0.62    2013-10-04 (SHARYANTO)
