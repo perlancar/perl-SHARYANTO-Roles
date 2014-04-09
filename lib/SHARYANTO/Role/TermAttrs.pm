@@ -70,11 +70,23 @@ has use_color => (
             $self->{_term_attrs_debug_info}{use_color_from} =
                 'COLOR env';
             return $ENV{COLOR};
+        } elsif (defined $ENV{COLOR_DEPTH}) {
+            $self->{_term_attrs_debug_info}{use_color_from} =
+                'COLOR_DEPTH env';
+            my $val = __parse_color_depth($ENV{COLOR_DEPTH}) //
+                $ENV{COLOR_DEPTH};
+            return $val ? 1:0;
         } else {
             $self->{_term_attrs_debug_info}{use_color_from} =
                 'interactive + color_deth';
             return $self->interactive && $self->color_depth > 0;
         }
+    },
+    trigger => sub {
+        my ($self, $val) = @_;
+        return if !defined($val) || $val =~ /\A(|1|0)\z/;
+        my $pval = __parse_color_depth($val);
+        $self->{color_depth} = $pval if defined $pval;
     },
 );
 
@@ -106,7 +118,12 @@ has color_depth => (
     trigger => sub {
         my ($self, $val) = @_;
         if (defined(my $pval = __parse_color_depth($val))) {
-            $self->{color_depth} = $pval;
+            $self->{color_depth} = $val = $pval;
+        }
+        if ($val) {
+            $self->{use_color} = 1;
+        } else {
+            $self->{use_color} = 0;
         }
     },
 );
@@ -229,10 +246,19 @@ Default is 0 for Windows.
 
 =head2 use_color => BOOL (default: from env, or detected from terminal)
 
+For convenience, this attribute is "linked" with C<color_depth>. Setting
+C<use_color> will also set C<color_depth> when the value is not ''/1/0 and
+matches color depth pattern. For example, setting C<use_color> to 256 or '8bit'
+will also set C<color_depth> to 256.
+
 =head2 color_depth => INT (or STR, default: from env, or detected from terminal)
 
 Get/set color depth. When setting, you can use string like '8 bit' or '24b' and
 it will be converted to 256 (2**8) or 16777216 (2**24).
+
+For convenience, this attribute is "linked" with C<use_color>. Setting
+C<color_depth> to non-zero value will enable C<use_color>, while setting it to 0
+will disable C<use_color>.
 
 =head2 term_width => INT (default: from env, or detected from terminal)
 
@@ -264,7 +290,8 @@ C<COLOR_DEPTH> is not defined).
 
 =item * COLOR_DEPTH => INT (or STR)
 
-Can be used to set C<color_depth>.
+Can be used to set C<color_depth>. Can also be used to enable/disable
+C<use_color>.
 
 =item * BOX_CHARS => BOOL
 
