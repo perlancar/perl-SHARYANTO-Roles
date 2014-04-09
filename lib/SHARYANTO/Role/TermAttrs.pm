@@ -33,6 +33,19 @@ sub _term_size {
     ($termw_cache, $termh_cache);
 }
 
+# return undef if fail to parse
+sub __parse_color_depth {
+    my $val = shift;
+    if ($val =~ /\A\d+\z/) {
+        return $val;
+    } elsif ($val =~ /\A(\d+)[ _-]?(?:bit|b)\z/) {
+        return 2**$val;
+    } else {
+        # IDEA: parse 'high color', 'true color'?
+        return undef;
+    }
+}
+
 has interactive => (
     is      => 'rw',
     default => sub {
@@ -69,10 +82,17 @@ has color_depth => (
     is      => 'rw',
     default => sub {
         my $self = shift;
-        if (defined $ENV{COLOR_DEPTH}) {
+        my $pval;
+        if (defined($ENV{COLOR_DEPTH}) &&
+                defined($pval = __parse_color_depth($ENV{COLOR_DEPTH}))) {
             $self->{_term_attrs_debug_info}{color_depth_from} =
                 'COLOR_DEPTH env';
-            return $ENV{COLOR_DEPTH};
+            return $pval;
+        } elsif (defined($ENV{COLOR}) && $ENV{COLOR} !~ /^(|0|1)$/ &&
+                     defined($pval = __parse_color_depth($ENV{COLOR}))) {
+                $self->{_term_attrs_debug_info}{color_depth_from} =
+                    'COLOR env';
+            return $pval;
         } elsif (defined(my $cd = $self->detect_terminal->{color_depth})) {
             $self->{_term_attrs_debug_info}{color_depth_from} =
                 'detect_terminal';
@@ -81,6 +101,12 @@ has color_depth => (
             $self->{_term_attrs_debug_info}{color_depth_from} =
                 'hardcoded default';
             return 16;
+        }
+    },
+    trigger => sub {
+        my ($self, $val) = @_;
+        if (defined(my $pval = __parse_color_depth($val))) {
+            $self->{color_depth} = $pval;
         }
     },
 );
@@ -203,7 +229,10 @@ Default is 0 for Windows.
 
 =head2 use_color => BOOL (default: from env, or detected from terminal)
 
-=head2 color_depth => INT (default: from env, or detected from terminal)
+=head2 color_depth => INT (or STR, default: from env, or detected from terminal)
+
+Get/set color depth. When setting, you can use string like '8 bit' or '24b' and
+it will be converted to 256 (2**8) or 16777216 (2**24).
 
 =head2 term_width => INT (default: from env, or detected from terminal)
 
@@ -228,11 +257,12 @@ Can be used to set C<use_utf8>.
 
 Can be used to set C<interactive>.
 
-=item * COLOR => BOOL
+=item * COLOR => BOOL (or INT or STR)
 
-Can be used to set C<use_color>.
+Can be used to set C<use_color>. Can also be used to set C<color_depth> (if
+C<COLOR_DEPTH> is not defined).
 
-=item * COLOR_DEPTH => INT
+=item * COLOR_DEPTH => INT (or STR)
 
 Can be used to set C<color_depth>.
 
