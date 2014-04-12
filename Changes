@@ -1,5 +1,10 @@
 Revision history for SHARYANTO-Roles
 
+0.70    2014-04-09 (SHARYANTO)
+
+        - Accept pattern like '8 bit' or '24b' for color_depth, for convenience.
+
+
 0.69    2014-01-23 (SHARYANTO)
 
         - By default turn off use_box_chars when non-interactive, since most
