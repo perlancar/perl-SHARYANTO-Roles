@@ -271,6 +271,7 @@ will disable C<use_color>.
 
 Call L<Term::Detect::Software>'s C<detect_terminal_cached>.
 
+
 =head1 ENVIRONMENT
 
 =over
@@ -306,5 +307,3 @@ Can be used to set C<term_width>.
 Can be used to set C<term_height>.
 
 =back
-
-=cut
