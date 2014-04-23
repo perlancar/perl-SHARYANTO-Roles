@@ -143,7 +143,7 @@ sub list_color_themes {
 
     if (!$all_ct) {
         my $mods = Module::List::list_modules("$prefix\::",
-                                              {list_modules=>1});
+                                              {list_modules=>1, recurse=>1});
         no strict 'refs';
         $all_ct = {};
         for my $mod (sort keys %$mods) {

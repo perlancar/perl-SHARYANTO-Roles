@@ -82,7 +82,7 @@ sub list_border_styles {
 
     if (!$all_bs) {
         my $mods = Module::List::list_modules("$prefix\::",
-                                              {list_modules=>1});
+                                              {list_modules=>1, recurse=>1});
         no strict 'refs';
         $all_bs = {};
         for my $mod (sort keys %$mods) {
