@@ -1,5 +1,10 @@
 Revision history for SHARYANTO-Roles
 
+0.72    2014-04-23 (SHARYANTO)
+
+        - BorderStyle & ColorTheme: Search modules recursively.
+
+
 0.71    2014-04-09 (SHARYANTO)
 
         - TermAttrs: For convenience, use_color and color_depth can set each
