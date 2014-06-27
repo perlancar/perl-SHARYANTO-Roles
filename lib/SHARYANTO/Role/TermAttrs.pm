@@ -48,6 +48,7 @@ sub __parse_color_depth {
 
 has interactive => (
     is      => 'rw',
+    lazy    => 1,
     default => sub {
         my $self = shift;
         if (defined $ENV{INTERACTIVE}) {
@@ -64,6 +65,7 @@ has interactive => (
 
 has use_color => (
     is      => 'rw',
+    lazy    => 1,
     default => sub {
         my $self = shift;
         if (defined $ENV{COLOR}) {
@@ -92,6 +94,7 @@ has use_color => (
 
 has color_depth => (
     is      => 'rw',
+    lazy    => 1,
     default => sub {
         my $self = shift;
         my $pval;
@@ -130,6 +133,7 @@ has color_depth => (
 
 has use_box_chars => (
     is      => 'rw',
+    lazy    => 1,
     default => sub {
         my $self = shift;
         if (defined $ENV{BOX_CHARS}) {
@@ -156,6 +160,7 @@ has use_box_chars => (
 
 has use_utf8 => (
     is      => 'rw',
+    lazy    => 1,
     default => sub {
         my $self = shift;
         if (defined $ENV{UTF8}) {
@@ -179,6 +184,7 @@ has _term_attrs_debug_info => (is => 'rw', default=>sub{ {} });
 
 has term_width => (
     is      => 'rw',
+    lazy    => 1,
     default => sub {
         my $self = shift;
         if ($ENV{COLUMNS}) {
@@ -201,6 +207,7 @@ has term_width => (
 
 has term_height => (
     is      => 'rw',
+    lazy    => 1,
     default => sub {
         my $self = shift;
         if ($ENV{LINES}) {
