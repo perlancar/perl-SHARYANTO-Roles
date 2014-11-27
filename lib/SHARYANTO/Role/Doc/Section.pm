@@ -110,10 +110,6 @@ C<gen_doc_section_SECTION()> method for each section consecutively, which is
 supposed to append lines of text to C<doc_lines>. Finally all the added lines is
 concatenated together and returned by C<gen_doc()>.
 
-This module uses L<Log::Any> for logging.
-
-This module uses L<Moo> for object system.
-
 
 =head1 ATTRIBUTES
 
